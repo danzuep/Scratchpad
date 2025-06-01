@@ -6,13 +6,10 @@
 flowchart TD
     subgraph External
         ClientUI["Trade UI<br>(Web/Mobile)"]
-        APIGW["API Gateway<br>(OAuth2/Authz/Rate Limit/Versioning)"]
+        APIGW["API Gateway<br>(Auth/Version/Rate Limit)"]
     end
 
     subgraph Internal
-        AdminUI["Admin UI<br>(Swagger/Control Panel)"]
-        Broker[["Message Broker &<br>Dead Letter Queue"]]
-
         subgraph Services
             Audit["Audit Service"]
             TradeSvc["Trade Service<br>(Idempotency/Validation)"]
@@ -21,11 +18,11 @@ flowchart TD
             Notify["Notification Service"]
             ProjectionMgr["Projection Manager"]
         end
-        
-        subgraph Data
-            EventStore[("Event Store<br>(Append-only, Encrypted)")]
-            DB[("Trade View DB(s)<br>(Projections, Multi-View, Encrypted)")]
-        end
+
+        AdminUI["Admin UI<br>(Swagger)"]
+        Broker[["Message Broker &<br>Dead Letter Queue"]]
+        EventStore[("Event Store<br>(Append-only)")]
+        DB[("Trade View DB<br>(Multi-View Projections)")]
     end
 
     ClientUI -- Submits Trade --> APIGW
